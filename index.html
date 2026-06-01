@@ -4,39 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>TBAS Mobile</title>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TBAS">
+<meta name="theme-color" content="#3a2e1e">
+<!-- Home screen icon (inline SVG as data URI) -->
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZwWx=">
+<title>TBAS</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 html,body{height:100%;background:#b8a98a;font-family:'Share Tech Mono',monospace;color:#3a2e1e;overscroll-behavior:none;-webkit-text-size-adjust:100%;}
 
-/* ── SCREENS ── */
+/* safe area for notch/home bar */
+#game-screen, .screen { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+
 .screen{position:fixed;inset:0;background:rgba(40,25,5,0.96);display:flex;align-items:center;justify-content:center;z-index:100;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .screen.hidden{display:none!important;}
-.panel{background:#c9b896;border:2px solid #8a7555;border-radius:10px;padding:16px 14px;width:calc(100% - 24px);max-width:380px;text-align:center;}
+.panel{background:#c9b896;border:2px solid #8a7555;border-radius:10px;padding:14px 14px;width:calc(100% - 24px);max-width:380px;text-align:center;}
 .panel h1{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:3px;margin-bottom:2px;}
 .panel h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:6px;}
 .panel p{font-size:12px;color:#5a4a30;line-height:1.4;margin-bottom:8px;}
 
-/* ── BUTTONS ── */
-.btn{display:block;width:100%;padding:12px;background:#8a7555;border:none;border-radius:8px;color:#f8f4ee;font-family:'Share Tech Mono',monospace;font-size:14px;cursor:pointer;margin:5px 0;letter-spacing:.04em;-webkit-appearance:none;}
+.btn{display:block;width:100%;padding:11px;background:#8a7555;border:none;border-radius:8px;color:#f8f4ee;font-family:'Share Tech Mono',monospace;font-size:14px;cursor:pointer;margin:5px 0;-webkit-appearance:none;}
 .btn:active{opacity:.75;}
 .btn.ghost{background:transparent;border:2px solid #8a7555;color:#8a7555;}
 .btn.ghost:active{background:#8a7555;color:#f8f4ee;}
 
-/* ── DURATION ── */
-.dur-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0 14px;}
-.dur-opt{padding:14px 4px;background:#d4c5a5;border:2px solid #8a7555;border-radius:8px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:22px;text-align:center;user-select:none;}
+.dur-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0 12px;}
+.dur-opt{padding:12px 4px;background:#d4c5a5;border:2px solid #8a7555;border-radius:8px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:22px;text-align:center;user-select:none;}
 .dur-opt.sel,.dur-opt:active{background:#8a7555;color:#f8f4ee;}
 
-/* ── END ── */
 .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0;}
 .res-cell{background:#d4c5a5;border-radius:6px;padding:10px;}
 .rl{font-size:10px;color:#5a4a30;text-transform:uppercase;}
 .rv{font-family:'Bebas Neue',sans-serif;font-size:26px;}
 .pos{color:#1a5a1a;}.neg{color:#7a1010;}.neu{color:#3a2e1e;}
 
-/* ── RECORD ── */
 input.txt{width:100%;padding:10px;background:#d4c5a5;border:2px solid #8a7555;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:15px;color:#3a2e1e;margin:6px 0;-webkit-appearance:none;}
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0;}
 .chip{padding:7px 12px;background:#d4c5a5;border:1px solid #8a7555;border-radius:16px;cursor:pointer;font-size:12px;user-select:none;}
@@ -44,47 +47,48 @@ input.txt{width:100%;padding:10px;background:#d4c5a5;border:2px solid #8a7555;bo
 
 /* ── GAME ── */
 #game-screen{position:fixed;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#b8a98a;display:none;padding:6px;}
-
-#top-bar{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:#d4c5a5;border:2px solid #8a7555;border-radius:8px;margin-bottom:6px;}
-.t-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;}
-#main-timer{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;}
+#top-bar{display:flex;justify-content:space-between;align-items:center;padding:4px 8px;background:#d4c5a5;border:2px solid #8a7555;border-radius:8px;margin-bottom:5px;}
+.t-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;}
+#main-timer{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;}
 #totscore{font-family:'Bebas Neue',sans-serif;font-size:11px;}
-#stop-btn{padding:7px 10px;background:#7a1a1a;border:none;border-radius:6px;color:#f8f4ee;font-family:'Share Tech Mono',monospace;font-size:11px;cursor:pointer;-webkit-appearance:none;}
+#stop-btn{padding:6px 10px;background:#7a1a1a;border:none;border-radius:6px;color:#f8f4ee;font-family:'Share Tech Mono',monospace;font-size:11px;cursor:pointer;-webkit-appearance:none;}
 #stop-btn:active{opacity:.75;}
 
-.mod-card{background:#c9b896;border:2px solid #8a7555;border-radius:8px;padding:8px 10px;margin-bottom:6px;position:relative;}
+.mod-card{background:#c9b896;border:2px solid #8a7555;border-radius:8px;padding:6px 10px;margin-bottom:5px;position:relative;}
 .mod-label{font-size:9px;color:#5a4a30;text-transform:uppercase;letter-spacing:.05em;}
-.mod-score{font-family:'Bebas Neue',sans-serif;font-size:22px;position:absolute;top:6px;right:10px;}
+.mod-score{font-family:'Bebas Neue',sans-serif;font-size:20px;position:absolute;top:5px;right:10px;}
 
 /* ── LETTERS ── */
-#letter-strip{background:#d4c5a5;border-radius:6px;padding:6px 8px;text-align:center;font-size:18px;font-weight:700;letter-spacing:6px;margin:20px 0 2px;min-height:36px;transition:opacity .3s;}
-#lphase{font-size:10px;color:#5a4a30;margin-bottom:4px;min-height:14px;text-align:center;}
-#lshow{background:#d4c5a5;border-radius:6px;width:56px;height:48px;line-height:48px;text-align:center;font-size:28px;font-weight:700;margin:0 auto 8px;}
-.lbtn-row{display:flex;gap:16px;justify-content:center;margin-bottom:2px;}
-.lbtn{width:76px;height:76px;border-radius:50%;border:none;background:radial-gradient(circle at 36% 30%,#ccc,#555);box-shadow:0 4px 0 #222,0 6px 10px rgba(0,0,0,.45);font-size:30px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;user-select:none;}
-.lbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #222,0 2px 5px rgba(0,0,0,.4);}
-#lfb{text-align:center;font-size:12px;font-weight:700;min-height:16px;margin-top:3px;}
-#lcount{font-size:10px;color:#5a4a30;text-align:center;min-height:13px;}
+#letter-strip{background:#d4c5a5;border-radius:6px;padding:5px 8px;text-align:center;font-size:17px;font-weight:700;letter-spacing:6px;margin:18px 0 2px;min-height:32px;transition:opacity .3s;}
+#lphase{font-size:10px;color:#5a4a30;margin-bottom:4px;min-height:13px;text-align:center;}
+#lshow{background:#d4c5a5;border-radius:6px;width:50px;height:42px;line-height:42px;text-align:center;font-size:26px;font-weight:700;margin:0 auto 6px;}
+.lbtn-row{display:flex;gap:20px;justify-content:center;margin-bottom:2px;}
+/* Smaller ✓✗ buttons */
+.lbtn{width:58px;height:58px;border-radius:50%;border:none;background:radial-gradient(circle at 36% 30%,#ccc,#555);box-shadow:0 3px 0 #222,0 5px 8px rgba(0,0,0,.4);font-size:24px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;user-select:none;}
+.lbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #222,0 2px 4px rgba(0,0,0,.35);}
+#lfb{text-align:center;font-size:11px;font-weight:700;min-height:14px;margin-top:3px;}
+#lcount{font-size:9px;color:#5a4a30;text-align:center;min-height:12px;}
 
 /* ── MATH ── */
-#math-display{display:flex;flex-direction:column;align-items:center;margin:20px 0 6px;}
-#mopsym{font-size:20px;font-weight:700;width:160px;padding-left:4px;}
-.mrow{font-size:24px;font-weight:700;text-align:right;width:160px;}
-.mdiv{border-bottom:2px solid #3a2e1e;width:160px;margin:2px 0;}
-#mansrow{display:flex;gap:4px;justify-content:flex-end;width:160px;margin-top:4px;}
-.abox{width:34px;height:36px;background:#d4c5a5;border:2px solid #8a7555;border-radius:4px;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+#math-display{display:flex;flex-direction:column;align-items:center;margin:18px 0 4px;}
+#mopsym{font-size:18px;font-weight:700;width:150px;padding-left:4px;}
+.mrow{font-size:22px;font-weight:700;text-align:right;width:150px;}
+.mdiv{border-bottom:2px solid #3a2e1e;width:150px;margin:2px 0;}
+#mansrow{display:flex;gap:4px;justify-content:flex-end;width:150px;margin-top:4px;}
+.abox{width:30px;height:32px;background:#d4c5a5;border:2px solid #8a7555;border-radius:4px;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;}
 .abox.cur{background:#fffbe8;border-color:#5a8fa0;}
 
-#numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:240px;margin:6px auto 0;}
-.nk{height:52px;background:#d4c5a5;border:2px solid #8a7555;border-radius:7px;font-size:20px;font-weight:700;color:#3a2e1e;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;user-select:none;}
+/* Shorter numpad */
+#numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;width:100%;max-width:230px;margin:5px auto 0;}
+.nk{height:44px;background:#d4c5a5;border:2px solid #8a7555;border-radius:7px;font-size:20px;font-weight:700;color:#3a2e1e;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;user-select:none;}
 .nk:active{opacity:.7;transform:scale(.95);}
 .nk.act{background:#b8a090;font-size:12px;}
 .nk.act:active{background:#8a7555;color:#f8f4ee;}
 .nk.clr{background:#d4a080;font-size:12px;}
 .nk.clr:active{background:#a03020;color:#f8f4ee;}
-#gt-btn{display:block;width:100%;max-width:240px;margin:6px auto 0;height:44px;background:#b8a090;border:2px solid #8a7555;border-radius:7px;font-family:'Share Tech Mono',monospace;font-size:12px;color:#3a2e1e;cursor:pointer;-webkit-appearance:none;}
+#gt-btn{display:block;width:100%;max-width:230px;margin:5px auto 0;height:38px;background:#b8a090;border:2px solid #8a7555;border-radius:7px;font-family:'Share Tech Mono',monospace;font-size:11px;color:#3a2e1e;cursor:pointer;-webkit-appearance:none;}
 #gt-btn:active{background:#8a7555;color:#f8f4ee;}
-#mfb{text-align:center;font-size:12px;font-weight:700;min-height:16px;margin-top:4px;}
+#mfb{text-align:center;font-size:11px;font-weight:700;min-height:14px;margin-top:3px;}
 
 /* ── ANALYTICS ── */
 #analytics-screen .panel{text-align:left;margin:12px auto;}
@@ -96,7 +100,7 @@ input.txt{width:100%;padding:10px;background:#d4c5a5;border:2px solid #8a7555;bo
 .sbox{background:#d4c5a5;border-radius:5px;padding:8px;text-align:center;}
 .sl{font-size:8px;color:#5a4a30;text-transform:uppercase;}
 .sv{font-size:16px;font-weight:700;}
-.chart-wrap{width:100%;height:110px;margin-bottom:8px;}
+.chart-wrap{width:100%;height:100px;margin-bottom:8px;}
 canvas.chart{width:100%;height:100%;border-radius:5px;display:block;}
 .att-tbl{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:10px;}
 .att-tbl th{background:#8a7555;color:#f8f4ee;padding:5px 6px;text-align:left;}
@@ -120,7 +124,7 @@ canvas.chart{width:100%;height:100%;border-radius:5px;display:block;}
     </div>
     <button class="btn" id="begin-btn">BEGIN TEST</button>
     <button class="btn ghost" id="records-btn">VIEW RECORDS</button>
-    <p style="font-size:10px;color:#8a7555;margin-top:4px;">TBAS Mobile Practice</p>
+    <p style="font-size:10px;color:#8a7555;margin-top:4px;">TBAS Mobile Practice · Add to Home Screen for best experience</p>
   </div>
 </div>
 
@@ -171,7 +175,6 @@ canvas.chart{width:100%;height:100%;border-radius:5px;display:block;}
     <button id="stop-btn">&#9632; STOP</button>
   </div>
 
-  <!-- Letters -->
   <div class="mod-card">
     <div class="mod-label">Letters Score</div>
     <div class="mod-score" id="scl">0</div>
@@ -186,7 +189,6 @@ canvas.chart{width:100%;height:100%;border-radius:5px;display:block;}
     <div id="lcount"></div>
   </div>
 
-  <!-- Math -->
   <div class="mod-card">
     <div class="mod-label">Math Score</div>
     <div class="mod-score" id="scm">0</div>
@@ -270,21 +272,15 @@ window.addEventListener('DOMContentLoaded',()=>{
   on('gt-btn',mathGT);
 });
 
-function selDur(s){
-  chosenDur=s;durSel=true;
-  [90,150,300].forEach(v=>$('d'+v).classList.toggle('sel',v===s));
-}
+function selDur(s){chosenDur=s;durSel=true;[90,150,300].forEach(v=>$('d'+v).classList.toggle('sel',v===s));}
 function resetToStart(){
   ['end-screen','record-screen','analytics-screen'].forEach(hide);
-  show('start-screen');
-  durSel=false;[90,150,300].forEach(v=>$('d'+v).classList.remove('sel'));
+  show('start-screen');durSel=false;[90,150,300].forEach(v=>$('d'+v).classList.remove('sel'));
 }
 function goBegin(){
   if(!durSel){alert('Please select a duration first.');return;}
-  hide('start-screen');
-  alive=true;timeLeft=chosenDur;lSc=0;mSc=0;updSc();
-  setTxt('main-timer',fmt(timeLeft));
-  $('game-screen').style.display='block';
+  hide('start-screen');alive=true;timeLeft=chosenDur;lSc=0;mSc=0;updSc();
+  setTxt('main-timer',fmt(timeLeft));$('game-screen').style.display='block';
   initLetter();initMath();
   timerInt=setInterval(()=>{timeLeft--;setTxt('main-timer',fmt(timeLeft));if(timeLeft<=0)endGame();},1000);
 }
@@ -304,8 +300,7 @@ function endGame(){
   show('end-screen');
 }
 function askUser(){
-  hide('end-screen');
-  const db=loadDB(),cr=$('user-chips');cr.innerHTML='';
+  hide('end-screen');const db=loadDB(),cr=$('user-chips');cr.innerHTML='';
   Object.keys(db).forEach(u=>{
     const c=document.createElement('div');c.className='chip';c.textContent=u;
     c.addEventListener('touchend',e=>{e.preventDefault();$('uname').value=u;},{passive:false});
@@ -347,7 +342,7 @@ function renderUser(recs,uname){
   html+='<div class="sbox"><div class="sl">Avg</div><div class="sv">'+avgTot+'</div></div>';
   html+='<div class="sbox"><div class="sl">pts/min</div><div class="sv">'+avgPpm+'</div></div>';
   html+='<div class="sbox"><div class="sl">Attempts</div><div class="sv">'+recs.length+'</div></div></div>';
-  html+='<div class="chart-wrap"><canvas class="chart" id="co" width="360" height="110"></canvas></div>';
+  html+='<div class="chart-wrap"><canvas class="chart" id="co" width="340" height="100"></canvas></div>';
   Object.keys(byDur).sort((a,b)=>+a-+b).forEach(dur=>{
     const grp=byDur[dur];
     const lAvg=(grp.reduce((s,r)=>s+(r.lSc||0),0)/grp.length).toFixed(1);
@@ -355,7 +350,7 @@ function renderUser(recs,uname){
     html+='<div class="sec-hdr"><span>'+fmt(+dur)+' ('+grp.length+')</span></div>';
     html+='<div class="srow"><div class="sbox"><div class="sl">Letters avg</div><div class="sv">'+lAvg+'</div></div>';
     html+='<div class="sbox"><div class="sl">Math avg</div><div class="sv">'+mAvg+'</div></div></div>';
-    html+='<div class="chart-wrap"><canvas class="chart" id="c'+dur+'" width="360" height="110"></canvas></div>';
+    html+='<div class="chart-wrap"><canvas class="chart" id="c'+dur+'" width="340" height="100"></canvas></div>';
     html+='<table class="att-tbl"><thead><tr><th>#</th><th>Date</th><th>L</th><th>M</th><th>Tot</th><th>p/m</th></tr></thead><tbody>';
     grp.forEach((r,i)=>{
       const d=r.date?new Date(r.date).toLocaleDateString():'—';
@@ -370,7 +365,7 @@ function renderUser(recs,uname){
     delBtn.addEventListener('click',()=>deleteUser(uname));
   }
   requestAnimationFrame(()=>{
-    drawLine('co',recs.map(r=>r.total),'#6a8fa0','Total');
+    drawLine('co',recs.map(r=>r.total),'#6a8fa0');
     Object.keys(byDur).forEach(dur=>drawMulti('c'+dur,byDur[dur]));
   });
 }
@@ -380,10 +375,10 @@ function deleteUser(name){
 }
 function drawLine(id,vals,col){
   const cv=document.getElementById(id);if(!cv)return;
-  const W=cv.clientWidth||340,H=110;cv.width=W;cv.height=H;
+  const W=cv.clientWidth||320,H=100;cv.width=W;cv.height=H;
   const ctx=cv.getContext('2d');ctx.fillStyle='#d4c5a5';ctx.fillRect(0,0,W,H);
   if(!vals.length)return;
-  const pad=20,gW=W-pad*2,gH=H-pad-14;
+  const pad=18,gW=W-pad*2,gH=H-pad-12;
   const mn=Math.min(...vals,0),mx=Math.max(...vals,1);
   const toY=v=>pad+gH-(v-mn)/(mx-mn||1)*gH;
   const toX=i=>vals.length===1?W/2:pad+i/(vals.length-1)*gW;
@@ -395,19 +390,19 @@ function drawLine(id,vals,col){
   }
   vals.forEach((v,i)=>{
     const x=toX(i),y=toY(v);
-    ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
+    ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
     ctx.font='9px Share Tech Mono';ctx.fillStyle='#3a2e1e';ctx.textAlign='center';
-    ctx.fillText(v,x,v>=0?y-7:y+14);ctx.fillText('#'+(i+1),x,H-2);
+    ctx.fillText(v,x,v>=0?y-6:y+13);ctx.fillText('#'+(i+1),x,H-1);
   });
 }
 function drawMulti(id,grp){
   const cv=document.getElementById(id);if(!cv)return;
-  const W=cv.clientWidth||340,H=110;cv.width=W;cv.height=H;
+  const W=cv.clientWidth||320,H=100;cv.width=W;cv.height=H;
   const ctx=cv.getContext('2d');ctx.fillStyle='#d4c5a5';ctx.fillRect(0,0,W,H);
   const COLS=['#6a8fa0','#5a8a5a'],KEYS=['lSc','mSc'],NAMES=['Letters','Math'];
   const all=grp.flatMap(r=>KEYS.map(k=>r[k]||0));
   const mn=Math.min(...all,0),mx=Math.max(...all,1);
-  const pad=20,gW=W-pad*2,gH=H-pad-20;
+  const pad=18,gW=W-pad*2,gH=H-pad-18;
   const toY=v=>pad+gH-(v-mn)/(mx-mn||1)*gH;
   const toX=i=>grp.length===1?W/2:pad+i/(grp.length-1)*gW;
   KEYS.forEach((k,si)=>{
@@ -419,8 +414,8 @@ function drawMulti(id,grp){
     vs.forEach((v,i)=>{ctx.beginPath();ctx.arc(toX(i),toY(v),3,0,Math.PI*2);ctx.fillStyle=c;ctx.fill();});
   });
   NAMES.forEach((n,i)=>{
-    const lx=pad+i*(gW/2);ctx.fillStyle=COLS[i];ctx.fillRect(lx,H-12,8,8);
-    ctx.font='9px Share Tech Mono';ctx.fillStyle='#3a2e1e';ctx.textAlign='left';ctx.fillText(n,lx+10,H-3);
+    const lx=pad+i*(gW/2);ctx.fillStyle=COLS[i];ctx.fillRect(lx,H-11,7,7);
+    ctx.font='9px Share Tech Mono';ctx.fillStyle='#3a2e1e';ctx.textAlign='left';ctx.fillText(n,lx+9,H-3);
   });
 }
 
@@ -444,8 +439,7 @@ function schedLQ(){
     lActive=false;setTxt('lshow','');setTxt('lcount','');setTxt('lphase','New set…');
     lTmo=setTimeout(()=>{if(alive)newLetterSet();},1200);return;
   }
-  lActive=false;setTxt('lshow','');
-  lTmo=setTimeout(showLQ,rnd(700,1800));
+  lActive=false;setTxt('lshow','');lTmo=setTimeout(showLQ,rnd(700,1800));
 }
 function showLQ(){
   if(!alive)return;
