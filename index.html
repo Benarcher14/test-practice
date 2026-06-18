@@ -344,13 +344,17 @@ function renderUser(recs,uname){
   html+='<div class="sbox"><div class="sl">pts/min</div><div class="sv">'+avgPpm+'</div></div>';
   html+='<div class="sbox"><div class="sl">Attempts</div><div class="sv">'+recs.length+'</div></div></div>';
   html+='<div class="chart-wrap"><canvas class="chart" id="co" width="340" height="100"></canvas></div>';
+  html+='<div class="srow"><div class="sbox"><div class="sl">Total avg</div><div class="sv">'+avgTot+'</div></div>';
+  html+='<div class="sbox"><div class="sl">Best total</div><div class="sv">'+bestTot+'</div></div></div>';
   Object.keys(byDur).sort((a,b)=>+a-+b).forEach(dur=>{
     const grp=byDur[dur];
     const lAvg=(grp.reduce((s,r)=>s+(r.lSc||0),0)/grp.length).toFixed(1);
     const mAvg=(grp.reduce((s,r)=>s+(r.mSc||0),0)/grp.length).toFixed(1);
+    const totAvg=(grp.reduce((s,r)=>s+r.total,0)/grp.length).toFixed(1);
     html+='<div class="sec-hdr"><span>'+fmt(+dur)+' ('+grp.length+')</span></div>';
     html+='<div class="srow"><div class="sbox"><div class="sl">Letters avg</div><div class="sv">'+lAvg+'</div></div>';
-    html+='<div class="sbox"><div class="sl">Math avg</div><div class="sv">'+mAvg+'</div></div></div>';
+    html+='<div class="sbox"><div class="sl">Math avg</div><div class="sv">'+mAvg+'</div></div>';
+    html+='<div class="sbox"><div class="sl">Total avg</div><div class="sv">'+totAvg+'</div></div></div>';
     html+='<div class="chart-wrap"><canvas class="chart" id="c'+dur+'" width="340" height="100"></canvas></div>';
     html+='<table class="att-tbl"><thead><tr><th>#</th><th>Date</th><th>L</th><th>M</th><th>Tot</th><th>p/m</th></tr></thead><tbody>';
     grp.forEach((r,i)=>{
@@ -366,7 +370,8 @@ function renderUser(recs,uname){
     delBtn.addEventListener('click',()=>deleteUser(uname));
   }
   requestAnimationFrame(()=>{
-    drawLine('co',recs.map(r=>r.total),'#6a8fa0');
+    const getPpm=r=>r.ppm||(r.elapsed>0?parseFloat((r.total/(r.elapsed/60)).toFixed(2)):0);
+    drawLine('co',recs.map(getPpm),'#6a8fa0','pts/min');
     Object.keys(byDur).forEach(dur=>drawMulti('c'+dur,byDur[dur]));
   });
 }
@@ -374,7 +379,7 @@ function deleteUser(name){
   if(!confirm('Delete all records for '+name+'?'))return;
   const db=loadDB();delete db[name];saveDB(db);openAnalytics();
 }
-function drawLine(id,vals,col){
+function drawLine(id,vals,col,label){
   const cv=document.getElementById(id);if(!cv)return;
   const W=cv.clientWidth||320,H=100;cv.width=W;cv.height=H;
   const ctx=cv.getContext('2d');ctx.fillStyle='#d4c5a5';ctx.fillRect(0,0,W,H);
@@ -393,7 +398,7 @@ function drawLine(id,vals,col){
     const x=toX(i),y=toY(v);
     ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
     ctx.font='9px Share Tech Mono';ctx.fillStyle='#3a2e1e';ctx.textAlign='center';
-    ctx.fillText(v,x,v>=0?y-6:y+13);ctx.fillText('#'+(i+1),x,H-1);
+    ctx.fillText(typeof v==='number'?v.toFixed(1):v,x,v>=0?y-6:y+13);ctx.fillText('#'+(i+1),x,H-1);
   });
 }
 function drawMulti(id,grp){
